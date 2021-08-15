@@ -6,3 +6,4 @@ class User(db.Model):
     username = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(80), nullable=False)
     gender = db.Column(db.String(1), nullable=True)
+    posts = db.relationship('UserPost', backref='user', lazy=True)

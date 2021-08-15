@@ -5,3 +5,5 @@ venv/
 __pycache__/
 
 /web_app/app.db
+
+.DS_Store
