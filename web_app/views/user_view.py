@@ -1,3 +1,4 @@
+from flask import jsonify
 from flask.views import MethodView
 from web_app.repositories.user_repo import UserRepo
 
@@ -10,7 +11,7 @@ class User(MethodView):
 
     def get(self):
         users = self.repo.get()
-        return 'ok', 200
+        return jsonify(users=users)
 
     def post(self):
         return 'ok', 201
