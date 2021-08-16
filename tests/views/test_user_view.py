@@ -40,16 +40,6 @@ USERS = [
 
 class TestUserView():
 
-    def setup_users(self, app_client):
-        with app_client.application.app_context():
-            for u in USERS:
-                user = User()
-                user.username = u['username']
-                user.email = u['email']
-                user.gender = u['gender']
-                DB.session.add(user)
-            DB.session.commit()
-
     def test_get_all_users(self, app_client, mocker):
         def return_function(*args, **kwargs):
             return [User.from_json(u) for u in USERS]
