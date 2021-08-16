@@ -16,10 +16,9 @@ def register_blueprints(app: Flask):
     app.add_url_rule('/users', view_func=User.as_view('users'))
 
 
-def init_app():
+def init_app(config_file='web_app.config.default'):
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config.from_object(config_file)
     with app.app_context():
         DB.init_app(app)
         migrate.init_app(app, DB)
