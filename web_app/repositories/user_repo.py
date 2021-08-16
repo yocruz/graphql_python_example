@@ -11,13 +11,18 @@ class UserRepo:
 
     def _get_all_users(self):
         users = User.query.all()
-        return [u.to_json() for u in users]
+        return users
 
     def _get_user_by_id(self, user_id):
-        raise NotImplementedError()
+        user = User.query.get(user_id)
+        return user
 
-    def add(self, user_data):
-        raise NotImplementedError()
+    def add(self, user_data: dict):
+        new_user = User.from_json(user_data)
+        DB.session.add(new_user)
+        DB.session.commit()
+        new_user.reload()
+        return new_user
 
     def delete(self, user_id):
         raise NotImplementedError()

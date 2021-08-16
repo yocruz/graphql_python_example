@@ -1,9 +1,8 @@
 from web_app import DB as db
-from .serializable_model import SerializableModel
+from .base_model import BaseModel, SerializableModel
 
 
-class User(db.Model, SerializableModel):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+class User(db.Model, BaseModel, SerializableModel):
     username = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(80), nullable=False)
     gender = db.Column(db.String(1), nullable=True)
