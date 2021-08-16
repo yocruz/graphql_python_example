@@ -50,29 +50,51 @@ class TestUserView():
                 DB.session.add(user)
             DB.session.commit()
 
-    def test_get_all_users(self, app_client):
-        self.setup_users(app_client)
+    def test_get_all_users(self, app_client, mocker):
+        def return_function(*args, **kwargs):
+            return [User.from_json(u) for u in USERS]
+
+        mocker.patch(
+            'web_app.repositories.user_repo.UserRepo._get_all_users', return_function)
         rv = app_client.get('/users')
         users = rv.json['users']
         assert len(USERS) == len(users)
 
-    def test_get_user_by_id(self, app_client):
-        self.setup_users(app_client)
+    def test_get_user_by_id(self, app_client, mocker):
+        def get_single_user(*args, **kwargs):
+            return User.from_json(USERS[0])
+
+        mocker.patch(
+            'web_app.repositories.user_repo.UserRepo._get_user_by_id', get_single_user)
+
         resp = app_client.get('/users?user_id=1')
         assert resp.json['user'] == USERS[0]
 
-    def test_get_user_by_id(self, app_client):
-        self.setup_users(app_client)
+    def test_get_user_by_id(self, app_client, mocker):
+        def get_single_user(*args, **kwargs):
+            return None
+
+        mocker.patch(
+            'web_app.repositories.user_repo.UserRepo._get_user_by_id', get_single_user)
+
         resp = app_client.get('/users?user_id=100')
         assert resp.json == {'errors': 'User not found'}
         assert resp.status_code == 404
 
-    def test_create_user_success(self, app_client):
+    def test_create_user_success(self, app_client, mocker):
         user = {
             'username': 'test_user',
             'email': 'a@a.com',
             'gender': 'M'
         }
+
+        def add_user(*args, **kwargs):
+            new_user = User.from_json(user)
+            new_user.id = 1
+            return new_user
+
+        mocker.patch(
+            'web_app.repositories.user_repo.UserRepo.add', add_user)
 
         resp = app_client.post('/users', json=user)
         assert resp.status_code == 201
