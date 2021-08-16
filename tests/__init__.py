@@ -1,6 +1,7 @@
 import os
 import pytest
 from web_app import init_app, DB
+from web_app.repositories.user_repo import UserRepo
 
 
 @pytest.fixture

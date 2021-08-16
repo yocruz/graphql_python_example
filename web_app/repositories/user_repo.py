@@ -11,7 +11,7 @@ class UserRepo:
 
     def _get_all_users(self):
         users = User.query.all()
-        return [u for u in users]
+        return [u.to_json() for u in users]
 
     def _get_user_by_id(self, user_id):
         raise NotImplementedError()
