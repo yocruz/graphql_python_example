@@ -84,7 +84,7 @@ class TestUserView():
             return new_user
 
         mocker.patch(
-            'web_app.repositories.user_repo.UserRepo.add', add_user)
+            'web_app.repositories.user_repo.UserRepo.create', add_user)
 
         resp = app_client.post('/users', json=user)
         assert resp.status_code == 201

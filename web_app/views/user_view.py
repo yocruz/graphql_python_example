@@ -23,7 +23,7 @@ class User(MethodView):
     def post(self):
         data = request.json
         try:
-            user = self.repo.add(data)
+            user = self.repo.create(data)
             return jsonify(user=user.to_json()), 201
         except Exception as err:
             return jsonify(errors=str(err)), 400
