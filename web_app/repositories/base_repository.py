@@ -27,14 +27,14 @@ class BaseRepository(Generic[M], metaclass=RequiredAttributes('model')):
     def get(self, id) -> M:
         return self.model.get(id)
 
-    def create(self, data_dict):
+    def create(self, data_dict) -> M:
         new_object = self.model.from_json(data_dict)
         db.session.add(new_object)
         db.session.commit()
         new_object.reload()
         return new_object
 
-    def delete(self, object_id):
+    def delete(self, object_id) -> M:
         obj = self.model.query.get(object_id)
         if obj is not None:
             db.session.delete(obj)
@@ -42,7 +42,7 @@ class BaseRepository(Generic[M], metaclass=RequiredAttributes('model')):
             return obj
         return None
 
-    def update(self, object_id, **kwargs):
+    def update(self, object_id, **kwargs) -> M:
         obj = self.model.query.get(object_id)
         if obj is None:
             raise NoResultFound(f'The {self.model.__class__.__name__} with id {object_id} does not exists')
