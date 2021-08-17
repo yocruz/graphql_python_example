@@ -9,8 +9,8 @@ class User(MethodView):
         super().__init__()
         self.repo = UserRepo()
 
-    def get(self):
-        user_id = request.args.get('user_id')
+    def get(self, user_id=None):
+        # user_id = request.args.get('user_id')
         users = self.repo.get(user_id)
         if not users:
             return jsonify(errors='User not found'), 404
@@ -27,3 +27,6 @@ class User(MethodView):
             return jsonify(user=user.to_json()), 201
         except Exception as err:
             return jsonify(errors=str(err)), 400
+
+    def put(self, user_id):
+        return 'updates', 200

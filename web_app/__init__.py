@@ -6,14 +6,17 @@ from flask_sqlalchemy import SQLAlchemy
 DB = SQLAlchemy()
 migrate = Migrate()
 
-#hack so migrate detects the models
+# hack so migrate detects the models
 from .models import *
 
 
 def register_blueprints(app: Flask):
     from .views.user_view import User
 
-    app.add_url_rule('/users', view_func=User.as_view('users'))
+    app.add_url_rule('/users', endpoint='users',
+                     view_func=User.as_view('users'))
+    app.add_url_rule('/users/<user_id>', endpoint='user',
+                     view_func=User.as_view('users'))
 
 
 def init_app(config_file='web_app.config.default'):
@@ -24,5 +27,3 @@ def init_app(config_file='web_app.config.default'):
         migrate.init_app(app, DB)
         register_blueprints(app)
         return app
-
-

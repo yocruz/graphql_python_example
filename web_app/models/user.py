@@ -3,8 +3,8 @@ from .base_model import BaseModel, SerializableModel
 
 
 class User(db.Model, BaseModel, SerializableModel):
-    username = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(80), nullable=False)
+    username = db.Column(db.String(50), nullable=False, unique=True)
+    email = db.Column(db.String(80), nullable=False, unique=True)
     gender = db.Column(db.String(1), nullable=True)
     posts = db.relationship('UserPost', backref='user', lazy=True)
 

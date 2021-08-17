@@ -4,7 +4,7 @@ from web_app import DB
 from .base_repository import BaseRepository
 
 
-class UserRepo(BaseRepository):
+class UserRepo(BaseRepository[User]):
 
     model = User
 

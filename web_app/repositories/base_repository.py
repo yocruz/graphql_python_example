@@ -1,3 +1,5 @@
+from typing import Optional, Generic, TypeVar
+
 from sqlalchemy.exc import NoResultFound
 from web_app import DB as db
 
@@ -15,11 +17,14 @@ def RequiredAttributes(*required_attrs):
     return RequiredAttributteMeta
 
 
-class BaseRepository(metaclass=RequiredAttributes('model')):
+M = TypeVar('M')
 
-    model = None  # all the subclasses have to define the model they implement
 
-    def get(self, id):
+class BaseRepository(Generic[M], metaclass=RequiredAttributes('model')):
+
+    model: Optional[type[M]] = None  # all the subclasses have to define the model they implement
+
+    def get(self, id) -> M:
         return self.model.get(id)
 
     def create(self, data_dict):
