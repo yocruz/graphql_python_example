@@ -1,3 +1,4 @@
+from sqlalchemy.exc import NoResultFound
 from web_app import DB as db
 
 
@@ -18,6 +19,9 @@ class BaseRepository(metaclass=RequiredAttributes('model')):
 
     model = None  # all the subclasses have to define the model they implement
 
+    def get(self, id):
+        return self.model.get(id)
+
     def create(self, data_dict):
         new_object = self.model.from_json(data_dict)
         db.session.add(new_object)
@@ -25,8 +29,22 @@ class BaseRepository(metaclass=RequiredAttributes('model')):
         new_object.reload()
         return new_object
 
-    def remove(self, object_id):
-        pass
+    def delete(self, object_id):
+        obj = self.model.query.get(object_id)
+        if obj is not None:
+            db.session.delete(obj)
+            db.session.commit()
+            return obj
+        return None
 
-    def update(self, object_id, new_data):
-        pass
+    def update(self, object_id, **kwargs):
+        obj = self.model.query.get(object_id)
+        if obj is None:
+            raise NoResultFound(f'The {self.model.__class__.__name__} with id {object_id} does not exists')
+
+        for key, value in kwargs.items():
+            if hasattr(obj, key):
+                setattr(obj, key, value)
+        db.session.commit()
+        obj.reload()
+        return obj

@@ -20,9 +20,3 @@ class UserRepo(BaseRepository):
     def _get_user_by_id(self, user_id):
         user = User.query.get(user_id)
         return user
-
-    def delete(self, user_id):
-        raise NotImplementedError()
-
-    def update(self, user_id, user_data):
-        raise NotImplementedError()

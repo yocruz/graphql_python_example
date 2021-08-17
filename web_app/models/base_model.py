@@ -11,9 +11,6 @@ class BaseModel(object):
     def reload(self):
         return db.session.refresh(self)
 
-    def remove(self):
-        raise NotImplementedError()
-
 
 class SerializableModel:
 
@@ -33,6 +30,12 @@ class SerializableModel:
 
     @classmethod
     def from_json(cls, object_data, strict=False):
+        """
+        Creates a new object from a dict containing the model 
+        values.
+        If strict is set to true, any field not present in the original
+        model will raise an exception
+        """
         new_object = cls()
         for key, val in object_data.items():
             if hasattr(new_object, key):
