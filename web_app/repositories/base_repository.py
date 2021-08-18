@@ -22,7 +22,7 @@ M = TypeVar('M')
 
 class BaseRepository(Generic[M], metaclass=RequiredAttributes('model')):
 
-    model: Optional[type[M]] = None  # all the subclasses have to define the model they implement
+    model: Optional[type(M)] = None  # all the subclasses have to define the model they implement
 
     def get(self, id=None) -> M:
         return self.model.get(id)
