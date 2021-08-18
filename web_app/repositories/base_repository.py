@@ -24,8 +24,13 @@ class BaseRepository(Generic[M], metaclass=RequiredAttributes('model')):
 
     model: Optional[type(M)] = None  # all the subclasses have to define the model they implement
 
-    def get(self, id=None) -> M:
-        return self.model.get(id)
+    def get(self, id=None, page=1, page_size=10) -> M:
+        if id:
+            return self.model.get(id)
+        return self.get_all_paged(page, page_size)
+
+    def get_all_paged(self, page=1, page_size=10):
+        return self.model.query.paginate(page, page_size)
 
     def create(self, data_dict) -> M:
         new_object = self.model.from_json(data_dict)
