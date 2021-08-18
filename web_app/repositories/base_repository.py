@@ -24,7 +24,7 @@ class BaseRepository(Generic[M], metaclass=RequiredAttributes('model')):
 
     model: Optional[type[M]] = None  # all the subclasses have to define the model they implement
 
-    def get(self, id) -> M:
+    def get(self, id=None) -> M:
         return self.model.get(id)
 
     def create(self, data_dict) -> M:
