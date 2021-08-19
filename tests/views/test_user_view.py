@@ -60,7 +60,7 @@ class TestUserView():
         resp = app_client.get('/users?user_id=1')
         assert resp.json['user'] == USERS[0]
 
-    def test_get_user_by_id(self, app_client, mocker):
+    def test_get_user_by_id_not_found(self, app_client, mocker):
         def get_single_user(*args, **kwargs):
             return None
 
